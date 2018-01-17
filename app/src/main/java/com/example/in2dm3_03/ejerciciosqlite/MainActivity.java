@@ -5,12 +5,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     private AdaptadorBD bd;
     private Button aniadir,mostrar,borrar,actualizar;
+    private TextView nombre, mail, eliminar;
+    private String n,m,e;
+    private int eli;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,13 +25,19 @@ public class MainActivity extends AppCompatActivity {
         mostrar=(Button)findViewById(R.id.buttonMostrar);
         borrar=(Button)findViewById(R.id.buttonBorrar);
         actualizar=(Button)findViewById(R.id.buttonActualizar);
+
+        nombre=(TextView)findViewById(R.id.editTextNombre);
+        mail=(TextView)findViewById(R.id.editTextMail);
+        eliminar=(TextView)findViewById(R.id.editTextEliminar);
     }
 
     public void onclick(View v){
         Button boton = (Button) v;
 
         if(boton.getId()==R.id.buttonAniadirContacto){
-            crear();
+            n=nombre.getText().toString();
+            m=mail.getText().toString();
+            crear(n,m);
             Toast.makeText(getApplicationContext(),"Creado",Toast.LENGTH_LONG);
         }else if(boton.getId()==R.id.buttonMostrar){
             bd.abrir();
@@ -40,19 +50,20 @@ public class MainActivity extends AppCompatActivity {
             }
             bd.cerrar();
         }else if(boton.getId()==R.id.buttonBorrar){
-            borrar();
+            e=eliminar.getText().toString();
+            borrar(e);
         }else if(boton.getId()==R.id.buttonActualizar){
             actualizar();
         }
     }
 
-    public void crear() {
-        String nombre="Unai";
-        String mail="unai@gmail.com";
+    public void crear(String m,String n) {
+        //String nombre="Unai";
+        //String mail="unai@gmail.com";
         //abrir BD
         bd.abrir();
         //---añadir un contacto--
-        long id = bd.insertarContacto(nombre, mail);
+        long id = bd.insertarContacto(n, m);
         Toast.makeText(getApplicationContext(),"Contacto "+ nombre+ " Creado",Toast.LENGTH_SHORT).show();
         //añadir otro contacto
         //id = bd.insertarContacto("Mikel", "mikel@gmail.com");
@@ -70,10 +81,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void borrar(){
+    public void borrar(String e){
         //---borrar un contacto---
+        eli=Integer.parseInt(e);
         bd.abrir();
-        if (bd.borrarContacto(7))
+        if (bd.borrarContacto(eli))
             Toast.makeText(this, "Borrado realizado.", Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, "Borrado fallido.", Toast.LENGTH_LONG).show();
