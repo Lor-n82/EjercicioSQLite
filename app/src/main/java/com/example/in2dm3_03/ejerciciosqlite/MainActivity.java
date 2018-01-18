@@ -12,8 +12,8 @@ public class MainActivity extends AppCompatActivity {
 
     private AdaptadorBD bd;
     private Button aniadir,mostrar,borrar,actualizar;
-    private TextView nombre, mail, eliminar;
-    private String n,m,e;
+    private TextView nombre, mail, eliminar, actuId, actuNom, actuMail;
+    private String n,m,e,id;
     private int eli;
 
     @Override
@@ -29,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
         nombre=(TextView)findViewById(R.id.editTextNombre);
         mail=(TextView)findViewById(R.id.editTextMail);
         eliminar=(TextView)findViewById(R.id.editTextEliminar);
+
+        actuId=(TextView)findViewById(R.id.editTextActualizarId);
+        actuNom=(TextView)findViewById(R.id.editTextActualizarNombre);
+        actuMail=(TextView)findViewById(R.id.editTextActualizarMail);
     }
 
     public void onclick(View v){
@@ -53,18 +57,21 @@ public class MainActivity extends AppCompatActivity {
             e=eliminar.getText().toString();
             borrar(e);
         }else if(boton.getId()==R.id.buttonActualizar){
-            actualizar();
+            id=actuId.getText().toString();
+            n=actuNom.getText().toString();
+            m=actuMail.getText().toString();
+            actualizar(id,n,m);
         }
     }
 
-    public void crear(String m,String n) {
+    public void crear(String n,String m) {
         //String nombre="Unai";
         //String mail="unai@gmail.com";
         //abrir BD
         bd.abrir();
         //---añadir un contacto--
         long id = bd.insertarContacto(n, m);
-        Toast.makeText(getApplicationContext(),"Contacto "+ nombre+ " Creado",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(),"Contacto "+ n + " Creado",Toast.LENGTH_SHORT).show();
         //añadir otro contacto
         //id = bd.insertarContacto("Mikel", "mikel@gmail.com");
         //cerrar base de datos
@@ -92,10 +99,12 @@ public class MainActivity extends AppCompatActivity {
         bd.cerrar();
     }
 
-    public void actualizar(){
+    public void actualizar(String id,String n,String m){
+        eli=Integer.parseInt(id);
+
         //---actualizar un contacto---
         bd.abrir();
-        if (bd.actualizarContacto(1, "Maria", "maria@yahoo.es"))
+        if (bd.actualizarContacto(eli, n, m))
             Toast.makeText(this, "Actualización realizada .", Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, "Actualización fallida.", Toast.LENGTH_LONG).show();
